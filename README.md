@@ -34,7 +34,7 @@ The task description mentions that we can achieve optimal convergence using arou
 3. Custom initialization of the output layer for `self.ar_net` (which is `m2` and `s2`) matters in case when we don't use the invertible BatchNorm in the transforms, so I left it commented out.
 4. `layers = 12` with flips included.
 5. `torch.optim.AdamW(..., lr=5e-3, weight_decay=0)` seems to be a more modern choice. I tried different `weight_decay` values, which of course affect the training, but decided to stick with zero. Also note that when `weight_decay=0`, AdamW is equivalent to Adam.
-6. `torch.optim.lr_scheduler.ExponentialLR(..., gamma=0.9998)` for the decay to happen a bit sooner, since we start with a relatively high learning rate.
+6. `torch.optim.lr_scheduler.ExponentialLR(..., gamma=0.9998)` for the decay to happen a bit later, since we start with a relatively high learning rate and the model seems to benefit from it.
 7. `batch_size=2048`.
 
 # Additional notes
@@ -42,3 +42,4 @@ The task description mentions that we can achieve optimal convergence using arou
 1. `from sklearn.mixture.gaussian_mixture import ...` is deprecated, it is now `sklearn.mixture._gaussian_mixture`.
 2. In the invertible BatchNorm implementation, the `.mean()` is redundant, since we already get a scalar at this point.
 3. `StandardNormalDistribution` returns a scalar in the `logprob()` method. It then broadcasts this scalar inside the `TransformedDistribution`, which seems kinda incorrect to me, so I made a little change to avoid unnecessary broadcasting. The only necessary broadcasting here happens when we include the log-det of the BatchNorm transform.
+

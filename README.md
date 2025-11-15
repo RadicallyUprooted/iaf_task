@@ -5,7 +5,7 @@ Flips the inputs to alternate the dependency when stacking multiple IAF steps.
 
 ### `forward(self, x)`
 1. First, we take a batch of samples `x` from the base distribution.
-2. We split it into `x1` and `x2`. However, we only need `x1` here.
+2. We split it into `x1` and `x2`. However, we only need `x1` for now.
 3. Since `m1` and `s1` are known, we compute `m2` and `s2` by passing `x1` through `self.ar_net`.
 4. Concatenate them to get `m` and `s`.
 5. Apply the transformation from Eq.14.
@@ -42,4 +42,5 @@ The task description mentions that we can achieve optimal convergence using arou
 1. `from sklearn.mixture.gaussian_mixture import ...` is deprecated, it is now `sklearn.mixture._gaussian_mixture`.
 2. In the invertible BatchNorm implementation, the `.mean()` is redundant, since we already get a scalar at this point.
 3. `StandardNormalDistribution` returns a scalar in the `logprob()` method. It then broadcasts this scalar inside the `TransformedDistribution`, which seems kinda incorrect to me, so I made a little change to avoid unnecessary broadcasting. The only necessary broadcasting here happens when we include the log-det of the BatchNorm transform.
+
 
